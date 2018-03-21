@@ -669,10 +669,12 @@ def calc_mnistrgb_histogram(run_id, num_images=25600, log='histogram.txt', minib
 #----------------------------------------------------------------------------
 
 if __name__ == "__main__":
+    # training dataset defined by 'dataset' in config.py
     np.random.seed(config.random_seed)
     func_params = config.train
     func_name = func_params['func']
     del func_params['func']
+    # use 'train_gan'
     globals()[func_name](**func_params)
 
 #----------------------------------------------------------------------------
