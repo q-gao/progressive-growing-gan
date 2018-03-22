@@ -97,9 +97,17 @@ loss = dict(                                # Loss function:
 
 #----------------------------------------------------------------------------
 # Configuration overrides for individual experiments.
+if 1:
+    run_desc = 'phphoto-64x64'
+    dataset = dict(h5_path='phphoto-64x64.h5', resolution=64, max_labels=0, mirror_augment=True, max_images=30000)
+
+
+if 0:
+    run_desc = 'celeb-128x128'
+    dataset = dict(h5_path='celeba-128x128.h5', resolution=128, max_labels=0, mirror_augment=True, max_images=30000)
 
 # Section 6.3: "High-resolution image generation using CelebA-HQ dataset"
-if 1:
+if 0:
     run_desc = 'celeb-hq-1024x1024'
     dataset = dict(h5_path='celeba-hq-1024x1024.h5', resolution=1024, max_labels=0, mirror_augment=True, max_images=30000)
 

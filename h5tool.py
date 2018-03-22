@@ -438,6 +438,31 @@ def create_lsun(h5_filename, lmdb_dir, resolution=256, max_images=None):
         
 #----------------------------------------------------------------------------
 
+def create_phphoto(h5_filename, phphoto_dir):
+    print 'Creating phphoto dataset %s from %s' % (h5_filename, phphoto_dir)
+    glob_pattern = os.path.join(phphoto_dir, '*.jpg')
+    image_filenames = sorted(glob.glob(glob_pattern))
+    # num_images = 202599
+    # if len(image_filenames) != num_images:
+    #     print 'Error: Expected to find %d images in %s' % (num_images, glob_pattern)
+    #     return
+
+    h5 = HDF5Exporter(h5_filename, 64, 3)
+    for idx, filename in enumerate(image_filenames):
+        print '%d\r' % (idx),
+        img = np.asarray(PIL.Image.open(filename))
+        #assert img.shape == (218, 178, 3)
+        img = img[6: 70, 4: 68]
+        img = img.transpose(2, 0, 1)  # HWC => CHW
+        h5.add_images(img[np.newaxis])
+
+    print '%-40s\r' % 'Flushing data...',
+    h5.close()
+    print '%-40s\r' % '',
+    print 'Added %d images.' % idx
+
+#----------------------------------------------------------------------------
+
 def create_celeba(h5_filename, celeba_dir, cx=89, cy=121):
     print 'Creating CelebA dataset %s from %s' % (h5_filename, celeba_dir)
     glob_pattern = os.path.join(celeba_dir, 'img_align_celeba_png', '*.png')
@@ -698,6 +723,11 @@ def execute_cmdline(argv):
     p.add_argument(     'delta_dir',        help='Directory to read CelebA-HQ deltas from')
     p.add_argument(     '--num_threads',    help='Number of concurrent threads (default: 4)', type=int, default=4)
     p.add_argument(     '--num_tasks',      help='Number of concurrent processing tasks (default: 100)', type=int, default=100)
+
+    p = add_command(    'create_phphoto',   'Create HDF5 dataset for PH Photo.',
+                                            'create_phphoto phphoto-64x64.h5 ~/phphoto')
+    p.add_argument(     'h5_filename',      help='HDF5 file to create')
+    p.add_argument(     'phphoto_dir',       help='Directory to read phphoto from')
 
     args = parser.parse_args(argv[1:])
     func = globals()[args.command]
