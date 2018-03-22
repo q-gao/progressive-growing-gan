@@ -55,7 +55,7 @@ train = dict(                               # Training parameters:
     lod_initial_resolution  = 4,            # Network resolution at the beginning.
     lod_training_kimg       = 600,          # Thousands of real images to show before doubling network resolution.
     lod_transition_kimg     = 600,          # Thousands of real images to show when fading in new layers.
-    total_kimg              = 15000,        # Thousands of real images to show in total.
+    total_kimg              = 15000,        # Thousands of real images to show in total aka Total length of the training, measured in thousands of real images.
     gdrop_coef              = 0.0,          # Do not inject multiplicative Gaussian noise in the discriminator.
 )
 

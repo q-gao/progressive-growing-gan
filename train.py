@@ -86,8 +86,8 @@ def train_gan(
     adam_beta1              = 0.0,
     adam_beta2              = 0.99,
     adam_epsilon            = 1e-8,
-    minibatch_default       = 16,
-    minibatch_overrides     = {},
+    minibatch_default       = 16,  # Maximum minibatch size, divided evenly among GPUs.
+    minibatch_overrides     = {},  # Maximum minibatch size per GPU for each resolution.
     rampup_kimg             = 40,
     rampdown_kimg           = 0,
     lod_initial_resolution  = 4,
@@ -102,14 +102,15 @@ def train_gan(
     drange_net              = [-1,1],
     drange_viz              = [-1,1],
     image_grid_size         = None,
-    tick_kimg_default       = 50,
-    tick_kimg_overrides     = {32:20, 64:10, 128:10, 256:5, 512:2, 1024:1},
-    image_snapshot_ticks    = 4,
-    network_snapshot_ticks  = 40,
+    tick_kimg_default       = 50, # Default interval of progress snapshots.
+    tick_kimg_overrides     = {32:20, 64:10, 128:10, 256:5, 512:2, 1024:1}, # Interval of progress snapshots for each resolution.
+    image_snapshot_ticks    = 4, # How often to export image snapshots?
+    network_snapshot_ticks  = 40, # How often to export network snapshots?
     image_grid_type         = 'default',
     resume_network_pkl      = None,
-    resume_kimg             = 0.0,
-    resume_time             = 0.0):
+    resume_kimg             = 0.0, # Assumed training progress at the beginning. Affects reporting and training schedule.
+    resume_time             = 0.0  # Assumed wallclock time at the beginning. Affects reporting.
+):
 
     # Load dataset and build networks.
     training_set, drange_orig = load_dataset()
